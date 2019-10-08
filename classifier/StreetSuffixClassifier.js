@@ -37,14 +37,14 @@ class StreetSuffixClassifier extends WordClassifier {
       // use an inverted index for full token matching as it's O(1)
       if (this.index.hasOwnProperty(span.norm)) {
         if (span.norm.length < 2) { confidence = 0.2 } // single letter streets are uncommon
-        span.classify(new StreetSuffixClassification(confidence))
+        span.classify(new StreetSuffixClassification(confidence, this.index[span.norm]))
         return
       }
 
       // try again for abbreviations denoted by a period such as 'str.', also O(1)
       if (span.contains.final.period && this.index.hasOwnProperty(span.norm.slice(0, -1))) {
         if (span.norm.length < 3) { confidence = 0.2 } // single letter streets are uncommon
-        span.classify(new StreetSuffixClassification(confidence))
+        span.classify(new StreetSuffixClassification(confidence, this.index[span.norm.slice(0, -1)]))
       }
     }
   }

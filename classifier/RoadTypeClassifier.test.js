@@ -35,10 +35,10 @@ module.exports.tests.road_types = (test) => {
   ]
 
   valid.forEach(token => {
-    test(`french prefix: ${token}`, (t) => {
+    test(`english road type: ${token}`, (t) => {
       let s = classify(token)
       t.deepEqual(s.classifications, {
-        RoadTypeClassification: new RoadTypeClassification(token.length > 1 ? 1.0 : 0.2)
+        RoadTypeClassification: new RoadTypeClassification(token.length > 1 ? 1.0 : 0.2, { langs: { en: true } })
       })
       t.end()
     })

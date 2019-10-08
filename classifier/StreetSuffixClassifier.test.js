@@ -29,17 +29,23 @@ module.exports.tests.single_character_tokens = (test) => {
 }
 
 module.exports.tests.english_suffix = (test) => {
-  let valid = [
-    'street', 'st', 'st.',
-    'road', 'rd', 'rd.',
-    'boulevard', 'blvd', 'blvd.'
-  ]
+  let valid = {
+    'street': { en: true },
+    'st': { en: true, sv: true },
+    'st.': { en: true, sv: true },
+    'road': { en: true },
+    'rd': { en: true },
+    'boulevard': { af: true, da: true, de: true, en: true, uk: true },
+    'blvd': { af: true, en: true, ro: true, uk: true },
+    'blvd.': { af: true, en: true, ro: true, uk: true },
+    'rd.': { en: true }
+  }
 
-  valid.forEach(token => {
+  Object.entries(valid).forEach(([ token, langs ]) => {
     test(`english suffix: ${token}`, (t) => {
       let s = classify(token)
       t.deepEqual(s.classifications, {
-        StreetSuffixClassification: new StreetSuffixClassification(token.length > 1 ? 1.0 : 0.2)
+        StreetSuffixClassification: new StreetSuffixClassification(token.length > 1 ? 1.0 : 0.2, { langs })
       })
       t.end()
     })
@@ -47,18 +53,25 @@ module.exports.tests.english_suffix = (test) => {
 }
 
 module.exports.tests.german_suffix = (test) => {
-  let valid = [
-    'straße', 'strasse', 'str', 'str.',
-    'platz', 'pl.',
-    'allee', 'al', 'al.',
-    'weg', 'w.'
-  ]
+  let valid = {
+    'straße': { de: true },
+    'strasse': { de: true },
+    'str': { af: true, de: true, en: true, it: true, nl: true, ro: true },
+    'str.': { af: true, de: true, en: true, it: true, nl: true, ro: true },
+    'pl.': { be: true, bg: true, de: true, el: true, en: true, eu: true, gsw: true, lt: true, nb: true, oc: true, pl: true, ru: true, sv: true, uk: true },
+    'platz': { de: true, gsw: true },
+    'allee': { de: true, et: true },
+    'al': { be: true, bs: true, de: true, en: true, fi: true, hr: true, lt: true, pl: true, ro: true, ru: true, uk: true },
+    'al.': { be: true, bs: true, de: true, en: true, fi: true, hr: true, lt: true, pl: true, ro: true, ru: true, uk: true },
+    'weg': { af: true, de: true, nl: true },
+    'w.': { gsw: true }
+  }
 
-  valid.forEach(token => {
+  Object.entries(valid).forEach(([ token, langs ]) => {
     test(`german suffix: ${token}`, (t) => {
       let s = classify(token)
       t.deepEqual(s.classifications, {
-        StreetSuffixClassification: new StreetSuffixClassification(token.length > 1 ? 1.0 : 0.2)
+        StreetSuffixClassification: new StreetSuffixClassification(token.length > 1 ? 1.0 : 0.2, { langs })
       })
       t.end()
     })
@@ -66,13 +79,13 @@ module.exports.tests.german_suffix = (test) => {
 }
 
 module.exports.tests.valid_pelias_street_types = (test) => {
-  let valid = ['paku']
+  let valid = { 'paku': { en: true } }
 
-  valid.forEach(token => {
+  Object.entries(valid).forEach(([ token, langs ]) => {
     test(`valid pelias street types: ${token}`, (t) => {
       let s = classify(token)
       t.deepEqual(s.classifications, {
-        StreetSuffixClassification: new StreetSuffixClassification(token.length > 1 ? 1.0 : 0.2)
+        StreetSuffixClassification: new StreetSuffixClassification(token.length > 1 ? 1.0 : 0.2, { langs })
       })
       t.end()
     })

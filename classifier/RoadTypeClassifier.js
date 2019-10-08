@@ -22,7 +22,7 @@ class RoadTypeClassifier extends WordClassifier {
     // use an inverted index for full token matching as it's O(1)
     if (this.index.hasOwnProperty(span.norm)) {
       if (span.norm.length < 2) { confidence = 0.2 }
-      span.classify(new RoadTypeClassification(confidence))
+      span.classify(new RoadTypeClassification(confidence, this.index[span.norm]))
     }
   }
 }

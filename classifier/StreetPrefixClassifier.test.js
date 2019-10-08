@@ -29,17 +29,23 @@ module.exports.tests.single_character_tokens = (test) => {
 }
 
 module.exports.tests.french_prefix = (test) => {
-  let valid = [
-    'rue', 'allée', 'allee',
-    'avenue', 'av', 'rt.',
-    'boulevard', 'blvd', 'blvd.'
-  ]
+  let valid = {
+    'rue': { fr: true },
+    'allée': { fr: true },
+    'allee': { fr: true },
+    'avenue': { fr: true },
+    'av': { fr: true, ca: true, es: true, pt: true },
+    'rt.': { fr: true, es: true },
+    'boulevard': { fr: true, es: true },
+    'blvd': { fr: true, es: true },
+    'blvd.': { fr: true, es: true }
+  }
 
-  valid.forEach(token => {
+  Object.entries(valid).forEach(([ token, langs ]) => {
     test(`french prefix: ${token}`, (t) => {
       let s = classify(token)
       t.deepEqual(s.classifications, {
-        StreetPrefixClassification: new StreetPrefixClassification(token.length > 1 ? 1.0 : 0.2)
+        StreetPrefixClassification: new StreetPrefixClassification(token.length > 1 ? 1.0 : 0.2, { langs })
       })
       t.end()
     })
